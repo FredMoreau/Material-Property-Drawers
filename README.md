@@ -8,10 +8,12 @@ Note if set to Slider, the limits are those expected on the slider, not the appl
 
 #### Reciprocal
 A Material Property Drawer that sets the inverse of the value entered.
+
 `Reciprocal`
 
 #### OneMinus
 A Material Property Drawer that sets one minus the value entered.
+
 `OneMinus`
 
 #### Multiply
@@ -27,6 +29,7 @@ A Material Property Drawer that sets the inverse of the value entered.
 
 #### MiniThumbnail
 Displays a Texture Property on a single line.
+
 `MiniThumbnail`
 
 #### Inline
@@ -44,6 +47,7 @@ Can also enable a Keyword based on the properties values.
 #### SetKeyword
 Toggles a Keyword based on the property value.
 Not null for textures, above 0 for numeric types.
+
 `SetKeyword(string keyword, string state)`
 
 ### Advanced / Specific
@@ -52,10 +56,13 @@ Those Material Property Drawers help match Unity's specific Material UI.
 #### NormalMap
 Can be used on a NormalMap, HeightMap, OcclusionMap.
 It will only display the second property if the main map property is not null, and will also enable the keyword if the texture is not null and second property value is greater than zero.
+
 `NormalMap(string strengthProperty, string keyword)`
 
 #### MaterialWorkflow (URP)
 To be used on the MetallicMap property.
+
 **Work-In-Progress**
+
 `MaterialWorkflow(string metallicMapScaleProp, string specularMapProp, string specularColorProp, string smoothnessProp, string smoothnessSourceProp)`
 
