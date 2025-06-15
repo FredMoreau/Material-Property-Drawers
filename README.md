@@ -17,6 +17,7 @@ A Material Property Drawer that multiplies the value entered.
 Works on Float, Range and Int/Integer ShaderLab properties.
 
 `Multiply(float multiplier)`
+
 `Multiply(float multiplier, bool negative)`
 
 ### Inline Properties
@@ -30,8 +31,11 @@ Displays up to three properties on a single line.
 Can also enable a Keyword based on the properties values.
 
 `Inline(string extraProperty1)`
+
 `Inline(string extraProperty1, string extraProperty2)`
+
 `Inline(string extraProperty1, string extraProperty2, string keyword)`
+
 `Inline(string extraProperty1, string extraProperty2, string keyword, bool check1stProperty, bool check2ndProperty, bool check3rdProperty)`
 
 #### SetKeyword
