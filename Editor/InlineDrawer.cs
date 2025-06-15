@@ -38,7 +38,7 @@ namespace UnityEditor.MaterialPropertyDrawers
 
             EditorGUI.BeginChangeCheck();
             editor.TexturePropertySingleLine(new GUIContent(label), prop, prop1, prop2);
-            if (EditorGUI.EndChangeCheck())
+            if (EditorGUI.EndChangeCheck() && !string.IsNullOrEmpty(keyword))
                 SetKeyword(prop, prop1, prop2);
         }
 
