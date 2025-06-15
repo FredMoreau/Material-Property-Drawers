@@ -10,7 +10,7 @@ Note if set to Slider, the limits are those expected on the slider, not the appl
 A Material Property Drawer that sets the inverse of the value entered.
 
 #### OneMinus
-A Material Property Drawer that sets the inverse of the value entered.
+A Material Property Drawer that sets one minus the value entered.
 
 #### Multiply
 A Material Property Drawer that multiplies the value entered.
