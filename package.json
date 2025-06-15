@@ -1,0 +1,22 @@
+{
+    "name": "com.unity.material-property-drawers",
+    "displayName": "Material Property Drawers",
+    "version": "0.0.1-preview.1",
+    "unity": "6000.0",
+    "description": "A set of extra Material Property Drawers to use with Shaders and Shader Graphs.",
+    "author": {
+        "name": "Fred Moreau",
+        "email": "frederic.moreau@unity3d.com",
+        "url": "https://www.unity3d.com"
+    },
+    "keywords": [
+        "shader",
+        "editor"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:UserName/Repository.git"
+    },
+    "samples": [],
+    "hideInEditor": false
+}
