@@ -8,9 +8,11 @@ Note if set to Slider, the limits are those expected on the slider, not the appl
 
 #### Reciprocal
 A Material Property Drawer that sets the inverse of the value entered.
+`Reciprocal`
 
 #### OneMinus
 A Material Property Drawer that sets one minus the value entered.
+`OneMinus`
 
 #### Multiply
 A Material Property Drawer that multiplies the value entered.
@@ -25,6 +27,7 @@ A Material Property Drawer that sets the inverse of the value entered.
 
 #### MiniThumbnail
 Displays a Texture Property on a single line.
+`MiniThumbnail`
 
 #### Inline
 Displays up to three properties on a single line.
