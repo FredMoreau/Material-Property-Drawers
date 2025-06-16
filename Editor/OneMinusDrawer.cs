@@ -3,12 +3,15 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor.MaterialPropertyDrawers
 {
-    public class OneMinusDrawer : MaterialPropertyDrawer
+    public class OneMinusDrawer : CustomMaterialPropertyDrawerBase
     {
         public OneMinusDrawer() { }
 
         public override void OnGUI(Rect position, MaterialProperty prop, string label, MaterialEditor editor)
         {
+            if (!isVisible)
+                return;
+
             switch (prop.propertyType)
             {
                 case ShaderPropertyType.Float:
@@ -24,7 +27,7 @@ namespace UnityEditor.MaterialPropertyDrawers
         void CustomGUI(Rect position, MaterialProperty prop, string label, MaterialEditor editor)
         {
             editor.BeginAnimatedCheck(position, prop);
-            using (new EditorGUI.DisabledScope((prop.propertyFlags & ShaderPropertyFlags.PerRendererData) != 0))
+            using (new EditorGUI.DisabledScope(!isEnabled || (prop.propertyFlags & ShaderPropertyFlags.PerRendererData) != 0))
             {
                 MaterialEditor.BeginProperty(position, prop);
                 float labelWidth = EditorGUIUtility.labelWidth;
