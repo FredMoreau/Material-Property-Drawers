@@ -39,7 +39,7 @@ Works on Float, Range and Int/Integer ShaderLab properties.
 `Multiply(float multiplier, bool negative)`
 
 ### Inline Properties
-A Material Property Drawer that sets the inverse of the value entered.
+Material Property Drawers that display one or several properties on one line.
 
 #### MiniThumbnail
 Displays a Texture Property on a single line.
@@ -57,6 +57,9 @@ Can also enable a Keyword based on the properties values.
 `Inline(string extraProperty1, string extraProperty2, string keyword)`
 
 `Inline(string extraProperty1, string extraProperty2, string keyword, bool check1stProperty, bool check2ndProperty, bool check3rdProperty)`
+
+### Toggles
+Material Property Drawers that toggle keywords.
 
 #### SetKeyword
 Toggles a Keyword based on the property value.
