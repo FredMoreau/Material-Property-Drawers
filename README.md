@@ -1,6 +1,20 @@
 # Material Property Drawers
 A set of extra Material Property Drawers to use with Shaders and Shader Graphs.
 
+## Common Attributes
+Several Material Property Drawers share the same behaviors as they inherit from CustomMaterialPropertyDrawerBase.
+
+`[VisibleIf(_Property)]`
+Makes the property visible only if the referenced property is not null or non zero.
+`[VisibleIf(_Property, true)]`
+Hides the property if the referenced property is not null or non zero.
+
+`[EnableIf(_Property)]`
+Makes the property enabled only if the referenced property is not null or non zero.
+`[EnableIf(_Property, true)]`
+Disables the property if the referenced property is not null or non zero.
+
+## Property Drawers
 ### Math Operators
 Those work on Float and Range ShaderLab properties.
 In ShaderGraph, that means a Float in Default or Slider mode.
@@ -25,7 +39,7 @@ Works on Float, Range and Int/Integer ShaderLab properties.
 `Multiply(float multiplier, bool negative)`
 
 ### Inline Properties
-A Material Property Drawer that sets the inverse of the value entered.
+Material Property Drawers that display one or several properties on one line.
 
 #### MiniThumbnail
 Displays a Texture Property on a single line.
@@ -43,6 +57,9 @@ Can also enable a Keyword based on the properties values.
 `Inline(string extraProperty1, string extraProperty2, string keyword)`
 
 `Inline(string extraProperty1, string extraProperty2, string keyword, bool check1stProperty, bool check2ndProperty, bool check3rdProperty)`
+
+### Toggles
+Material Property Drawers that toggle keywords.
 
 #### SetKeyword
 Toggles a Keyword based on the property value.
