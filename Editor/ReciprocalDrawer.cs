@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor.MaterialPropertyDrawers
 {
-    public class ReciprocalDrawer : MaterialPropertyDrawer
+    public class ReciprocalDrawer : CustomMaterialPropertyDrawerBase
     {
         public ReciprocalDrawer() { }
 

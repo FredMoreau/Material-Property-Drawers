@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor.MaterialPropertyDrawers
 {
-    public class SetKeywordDrawer : MaterialPropertyDrawer
+    public class SetKeywordDrawer : CustomMaterialPropertyDrawerBase
     {
         string keyword;
         bool state = true;
@@ -21,10 +21,16 @@ namespace UnityEditor.MaterialPropertyDrawers
 
         public override void OnGUI(Rect position, MaterialProperty prop, string label, MaterialEditor editor)
         {
-            EditorGUI.BeginChangeCheck();
-            editor.DefaultShaderProperty(position, prop, label);
-            if (EditorGUI.EndChangeCheck() && !string.IsNullOrEmpty(keyword))
-                SetKeyword(prop);
+            if (!isVisible)
+                return;
+
+            using (new EditorGUI.DisabledScope(!isEnabled || (prop.propertyFlags & ShaderPropertyFlags.PerRendererData) != 0))
+            {
+                EditorGUI.BeginChangeCheck();
+                editor.DefaultShaderProperty(position, prop, label);
+                if (EditorGUI.EndChangeCheck() && !string.IsNullOrEmpty(keyword))
+                    SetKeyword(prop, keyword, state);
+            }
         }
 
         public override void Apply(MaterialProperty prop)
@@ -34,42 +40,7 @@ namespace UnityEditor.MaterialPropertyDrawers
             if (string.IsNullOrEmpty(keyword))
                 return;
 
-            SetKeyword(prop);
-        }
-
-        void SetKeyword(MaterialProperty prop)
-        {
-            bool enableKeyword = CheckProperty(prop);
-
-            if (enableKeyword == state)
-                EnableKeyword(prop.targets, keyword);
-            else
-                DisableKeyword(prop.targets, keyword);
-        }
-
-        bool CheckProperty(MaterialProperty prop) => prop.propertyType switch
-        {
-            ShaderPropertyType.Color => prop.colorValue.maxColorComponent > 0 || prop.colorValue.a > 0,
-            ShaderPropertyType.Vector => prop.vectorValue.magnitude > 0,
-            ShaderPropertyType.Float => prop.floatValue > 0,
-            ShaderPropertyType.Range => prop.floatValue > 0,
-            ShaderPropertyType.Texture => prop.textureValue != null,
-            ShaderPropertyType.Int => prop.intValue > 0,
-            _ => false
-        };
-
-        void EnableKeyword(Object[] mats, string keyword)
-        {
-            for (int i = 0; i < mats.Length; i++)
-                if (mats[i] is Material material)
-                        material.EnableKeyword(keyword);
-        }
-
-        void DisableKeyword(Object[] mats, string keyword)
-        {
-            for (int i = 0; i < mats.Length; i++)
-                if (mats[i] is Material material)
-                    material.DisableKeyword(keyword);
+            SetKeyword(prop, keyword, state);
         }
     }
 }

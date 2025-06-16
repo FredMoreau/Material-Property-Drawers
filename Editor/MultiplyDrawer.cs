@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor.MaterialPropertyDrawers
 {
-    public class MultiplyDrawer : MaterialPropertyDrawer
+    public class MultiplyDrawer : CustomMaterialPropertyDrawerBase
     {
         float multiplier = 1;
 

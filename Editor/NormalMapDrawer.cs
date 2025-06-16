@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 
 namespace UnityEditor.MaterialPropertyDrawers
 {
-    public class NormalMapDrawer : MaterialPropertyDrawer
+    public class NormalMapDrawer : CustomMaterialPropertyDrawerBase
     {
         string strengthProperty, keyword;
 
@@ -23,6 +23,9 @@ namespace UnityEditor.MaterialPropertyDrawers
 
         public override void OnGUI(Rect position, MaterialProperty prop, string label, MaterialEditor editor)
         {
+            if (!isVisible)
+                return;
+
             if (prop.propertyType != ShaderPropertyType.Texture)
             {
                 editor.DefaultShaderProperty(prop, label);
@@ -34,10 +37,13 @@ namespace UnityEditor.MaterialPropertyDrawers
 
             bool showStrengthProperty = strengthProp != null && prop.textureValue != null;
 
-            EditorGUI.BeginChangeCheck();
-            editor.TexturePropertySingleLine(new GUIContent(label), prop, showStrengthProperty ? strengthProp : null);
-            if (EditorGUI.EndChangeCheck() && strengthProp != null && !string.IsNullOrEmpty(keyword))
-                SetKeyword(prop, strengthProp);
+            using (new EditorGUI.DisabledScope(!isEnabled || (prop.propertyFlags & ShaderPropertyFlags.PerRendererData) != 0))
+            {
+                EditorGUI.BeginChangeCheck();
+                editor.TexturePropertySingleLine(new GUIContent(label), prop, showStrengthProperty ? strengthProp : null);
+                if (EditorGUI.EndChangeCheck() && strengthProp != null && !string.IsNullOrEmpty(keyword))
+                    SetKeyword(prop, strengthProp);
+            }
         }
 
         public override void Apply(MaterialProperty prop)
@@ -62,29 +68,6 @@ namespace UnityEditor.MaterialPropertyDrawers
                 DisableKeyword(prop.targets, keyword);
             else
                 EnableKeyword(prop.targets, keyword);
-        }
-
-        void EnableKeyword(Object[] mats, string keyword)
-        {
-            for (int i = 0; i < mats.Length; i++)
-                if (mats[i] is Material material)
-                    material.EnableKeyword(keyword);
-        }
-
-        void DisableKeyword(Object[] mats, string keyword)
-        {
-            for (int i = 0; i < mats.Length; i++)
-                if (mats[i] is Material material)
-                    material.DisableKeyword(keyword);
-        }
-
-        static MaterialProperty FindProperty(string propertyName, MaterialProperty[] properties)
-        {
-            for (int i = 0; i < properties.Length; i++)
-                if (properties[i] != null && properties[i].name == propertyName)
-                    return properties[i];
-
-            return null;
         }
     }
 }
