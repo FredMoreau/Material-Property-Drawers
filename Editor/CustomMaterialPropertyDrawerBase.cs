@@ -9,6 +9,13 @@ namespace UnityEditor.MaterialPropertyDrawers
     {
         protected bool isVisible = true, isEnabled = true;
 
+        /// <summary>
+        /// Call base.GetPropertyHeight when overriding as it handles extra attributes for visibility and enabled states.
+        /// </summary>
+        /// <param name="prop"></param>
+        /// <param name="label"></param>
+        /// <param name="editor"></param>
+        /// <returns></returns>
         public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
         {
             GetVisibility(prop, editor);

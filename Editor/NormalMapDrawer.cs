@@ -19,7 +19,11 @@ namespace UnityEditor.MaterialPropertyDrawers
             this.keyword = keyword;
         }
 
-        public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor) => 0;
+        public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
+        {
+            base.GetPropertyHeight(prop, label, editor);
+            return 0;
+        }
 
         public override void OnGUI(Rect position, MaterialProperty prop, string label, MaterialEditor editor)
         {

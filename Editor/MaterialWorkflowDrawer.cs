@@ -11,6 +11,8 @@ namespace UnityEditor.MaterialPropertyDrawers
         const string metallicSpecGlossMapKeyword = "_METALLICSPECGLOSSMAP";
         const string smoothnessTextureAlbedoChannelA = "_SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A";
 
+        bool specularMode = false, transparentType = false;
+
         public MaterialWorkflowDrawer() { }
 
         public MaterialWorkflowDrawer(string metallicMapScaleProp, string specularMapProp, string specularColorProp, string smoothnessProp, string smoothnessSourceProp)
@@ -22,7 +24,11 @@ namespace UnityEditor.MaterialPropertyDrawers
             this.smoothnessSourceProp = smoothnessSourceProp;
         }
 
-        public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor) => 0;
+        public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
+        {
+            base.GetPropertyHeight(prop, label, editor);
+            return 0;
+        }
 
         public override void OnGUI(Rect position, MaterialProperty prop, string label, MaterialEditor editor)
         {
@@ -49,30 +55,48 @@ namespace UnityEditor.MaterialPropertyDrawers
             using (new EditorGUI.DisabledScope(!isEnabled || (prop.propertyFlags & ShaderPropertyFlags.PerRendererData) != 0))
             {
                 EditorGUI.BeginChangeCheck();
+
+                string[] smoothnessSourceLabels = specularSetup ? new string[] { "Specular Alpha", "Albedo Alpha" } : new string[] { "Metallic Alpha", "Albedo Alpha" };
+
                 if (specularSetup) // specular mode
                 {
-                    //editor.TexturePropertyTwoLines(new GUIContent(specularMapProperty.displayName), specularMapProperty, specularColorProperty, new GUIContent(smoothnessProperty.displayName), smoothnessProperty);
                     editor.TexturePropertySingleLine(new GUIContent(specularMapProperty.displayName), specularMapProperty, specularColorProperty);
                     EditorGUI.indentLevel += 2;
                     editor.ShaderProperty(smoothnessProperty, smoothnessProperty.displayName);
                     EditorGUI.indentLevel += 1;
-                    // TODO: make property field work with material variants override
-                    // TODO: set the property to Specular Alpha (0) when transparent
-                    using (new EditorGUI.DisabledScope(transparent))
-                        smoothnessSourceProperty.floatValue = EditorGUILayout.Popup("Source", (int)smoothnessSourceProperty.floatValue, new string[] { "Specular Alpha", "Albedo Alpha" });
                 }
                 else // metallic mode
                 {
-                    //editor.TexturePropertyTwoLines(new GUIContent(label), prop, metallicMapScaleProperty, new GUIContent(smoothnessProperty.displayName), smoothnessProperty);
                     editor.TexturePropertySingleLine(new GUIContent(label), prop, metallicMapScaleProperty);
                     EditorGUI.indentLevel += 2;
                     editor.ShaderProperty(smoothnessProperty, smoothnessProperty.displayName);
                     EditorGUI.indentLevel += 1;
-                    using (new EditorGUI.DisabledScope(transparent))
-                        smoothnessSourceProperty.floatValue = EditorGUILayout.Popup("Source", (int)smoothnessSourceProperty.floatValue, new string[] { "Metallic Alpha", "Albedo Alpha" });
                 }
+
+                // DONE: make property field work with material variants override
+                // DONE: set the property to Metallic/Specular Alpha (0) when transparent
+                // TODO: make it properly display mixed values
+                if (transparent)
+                {
+                    using (new EditorGUI.DisabledScope(true))
+                    {
+                        EditorGUILayout.Popup("Source", 0, smoothnessSourceLabels);
+                    }
+                }
+                else
+                {
+                    var smoothnessSourceRect = EditorGUILayout.GetControlRect();
+                    editor.BeginAnimatedCheck(smoothnessSourceRect, smoothnessSourceProperty);
+                    MaterialEditor.BeginProperty(smoothnessSourceRect, smoothnessSourceProperty);
+                    EditorGUI.showMixedValue = smoothnessSourceProperty.hasMixedValue;
+                    smoothnessSourceProperty.floatValue = EditorGUI.Popup(smoothnessSourceRect, "Source", (int)smoothnessSourceProperty.floatValue, smoothnessSourceLabels);
+                    EditorGUI.showMixedValue = false;
+                    MaterialEditor.EndProperty();
+                    editor.EndAnimatedCheck();
+                }
+
                 EditorGUI.indentLevel -= 3;
-                if (EditorGUI.EndChangeCheck() && metallicMapScaleProperty != null)
+                if (EditorGUI.EndChangeCheck() || specularMode != specularSetup || transparentType != transparent)
                 {
                     if ((specularSetup && specularMapProperty.textureValue != null) ||
                         (!specularSetup && prop.textureValue != null))
@@ -80,10 +104,13 @@ namespace UnityEditor.MaterialPropertyDrawers
                     else
                         target.DisableKeyword(metallicSpecGlossMapKeyword);
 
-                    if (smoothnessSourceProperty.floatValue > 0)
+                    if (smoothnessSourceProperty.floatValue > 0 && !transparent)
                         target.EnableKeyword(smoothnessTextureAlbedoChannelA);
                     else
                         target.DisableKeyword(smoothnessTextureAlbedoChannelA);
+
+                    specularMode = specularSetup;
+                    transparentType = transparent;
                 }
             }
         }

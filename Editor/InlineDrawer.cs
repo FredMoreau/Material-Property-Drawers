@@ -30,12 +30,22 @@ namespace UnityEditor.MaterialPropertyDrawers
             this.propertyChecks = new[] { bool.Parse(check1), bool.Parse(check2), bool.Parse(check3) };
         }
 
-        public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor) => 0;
+        public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
+        {
+            base.GetPropertyHeight(prop, label, editor);
+            return 0;
+        }
 
         public override void OnGUI(Rect position, MaterialProperty prop, String label, MaterialEditor editor)
         {
             if (!isVisible)
                 return;
+
+            if (prop.propertyType != ShaderPropertyType.Texture)
+            {
+                editor.DefaultShaderProperty(prop, label);
+                return;
+            }
 
             var properties = MaterialEditor.GetMaterialProperties(prop.targets);
             MaterialProperty prop1 = FindProperty(extraProperty1, properties);
